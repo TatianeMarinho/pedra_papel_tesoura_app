@@ -72,12 +72,26 @@ class _JogoState extends State<Jogo> {
 
   //funcao auxiliar para criar a borda ao clicar
   BoxDecoration _estiloBorda(String opcao) {
+    bool selecionado = _escolhaUsuario == opcao;
+
     return BoxDecoration(
+      color: Colors.white,
       border: Border.all(
-        color: _escolhaUsuario == opcao ? Colors.green : Colors.amber,
+        color: selecionado ? Colors.green : Colors.amber,
         width: 4,
       ),
       borderRadius: BorderRadius.circular(50),
+      boxShadow: [
+        BoxShadow(
+          //verde selecinado e amarelo quando nao
+          color: selecionado
+              ? Colors.green.withValues(alpha: 0.6)
+              : Colors.amber.withValues(alpha: 0.4),
+          blurRadius: selecionado ? 15 : 10, //brilho da sombra
+          spreadRadius: selecionado ? 5 : 3, //expansao da sombra
+          offset: const Offset(0, 0),
+        ),
+      ],
     );
   }
 
@@ -86,7 +100,32 @@ class _JogoState extends State<Jogo> {
     double alturaTela = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(title: Text("Pedra, Papel & Tesoura")),
+      appBar: AppBar(
+        backgroundColor: Colors.amber,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Image.asset(
+                "images/droidybar.png",
+                height: 35,
+                width: 35,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(width: 15),
+            const Text(
+              "DroidyPô",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        centerTitle: false,
+      ),
       body: SingleChildScrollView(
         //garante que caiba em telas menores
         child: Container(
@@ -104,7 +143,29 @@ class _JogoState extends State<Jogo> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10), //respiro interno
-                  Image(image: _imagemApp, height: 85),
+                  Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.cyan, width: 4),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.cyan.withValues(alpha: 0.4),
+                          blurRadius: 15,
+                          spreadRadius: 3,
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: SizedBox(
+                        height: 80,
+                        width: 80,
+                        child: Image(image: _imagemApp, fit: BoxFit.contain),
+                      ),
+                    ),
+                  ),
                 ],
               ),
 
@@ -122,30 +183,42 @@ class _JogoState extends State<Jogo> {
                   GestureDetector(
                     onTap: () => _selecionarOpcao("pedra"),
                     child: Container(
+                      height: 85,
+                      width: 85,
                       decoration: _estiloBorda("pedra"),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(70),
-                        child: Image.asset("images/pedra.png", height: 75),
+                      child: ClipOval(
+                        child: Image.asset(
+                          "images/pedra.png",
+                          fit: BoxFit.cover, //faz a imagem preencher o circulo
+                        ),
                       ),
                     ),
                   ),
                   GestureDetector(
                     onTap: () => _selecionarOpcao("papel"),
                     child: Container(
+                      height: 85,
+                      width: 85,
                       decoration: _estiloBorda("papel"),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(70),
-                        child: Image.asset("images/papel.png", height: 75),
+                      child: ClipOval(
+                        child: Image.asset(
+                          "images/papel.png",
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
                   GestureDetector(
                     onTap: () => _selecionarOpcao("tesoura"),
                     child: Container(
+                      height: 85,
+                      width: 85,
                       decoration: _estiloBorda("tesoura"),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(70),
-                        child: Image.asset("images/tesoura.png", height: 75),
+                      child: ClipOval(
+                        child: Image.asset(
+                          "images/tesoura.png",
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -156,25 +229,48 @@ class _JogoState extends State<Jogo> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  //Botao jokenpo
+                  //Botao droidpo
                   Container(
+                    height: 70,
+                    width: 70,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.amber, width: 3),
-                      borderRadius: BorderRadius.circular(35),
+                      shape: BoxShape.circle,
+                      //usa a forma circulo no proprio container
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.amber.withValues(alpha: 0.5),
+                          blurRadius: 15,
+                          spreadRadius: 5,
+                          offset: const Offset(0, 0),
+                        ),
+                      ],
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(35),
+                    child: ClipOval(
                       child: GestureDetector(
                         onTap: _jogar,
-                        child: Image.asset("images/jokenpo.jpeg", height: 65),
+                        child: Image.asset(
+                          "images/droidypo.png",
+                          fit: BoxFit
+                              .cover, //faz a imagem preencher o circulo sem esticar
+                        ),
                       ),
                     ),
                   ),
                   //botao nova rodada
                   Container(
                     decoration: BoxDecoration(
+                      color: Colors.white,
                       border: Border.all(color: Colors.blue, width: 3),
                       borderRadius: BorderRadius.circular(40),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          spreadRadius: 5,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: IconButton(
                       icon: const Icon(
@@ -189,8 +285,17 @@ class _JogoState extends State<Jogo> {
                   //botao zerar placar
                   Container(
                     decoration: BoxDecoration(
+                      color: Colors.white,
                       border: Border.all(color: Colors.red, width: 3),
                       borderRadius: BorderRadius.circular(40),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.red.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          spreadRadius: 5,
+                          offset: const Offset(0, 0),
+                        ),
+                      ],
                     ),
                     child: IconButton(
                       icon: const Icon(
@@ -199,7 +304,7 @@ class _JogoState extends State<Jogo> {
                         color: Colors.red,
                       ),
                       onPressed: _zerarPlacar,
-                      tooltip: "Nova Rodada",
+                      tooltip: "zerar placar",
                     ),
                   ),
                 ],
@@ -211,7 +316,7 @@ class _JogoState extends State<Jogo> {
       bottomNavigationBar: Container(
         height: 100,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: Colors.amber,
           boxShadow: [
             BoxShadow(
               color: Colors.black12,
@@ -219,17 +324,19 @@ class _JogoState extends State<Jogo> {
               offset: Offset(0, -4), //cria sombra para cima
             ),
           ],
-          border: Border(top: BorderSide(color: Colors.grey, width: 0.5)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              "PLACAR",
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey,
+            const Align(
+              alignment: Alignment.topCenter,
+              child: Text(
+                "PLACAR",
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
               ),
             ),
             Row(
@@ -241,7 +348,7 @@ class _JogoState extends State<Jogo> {
                     Text(
                       "$_pontosJogador",
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.green,
                       ),
@@ -255,15 +362,16 @@ class _JogoState extends State<Jogo> {
                     Text(
                       "$_pontosApp",
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.red,
+                        color: Colors.cyan,
                       ),
                     ),
                   ],
                 ),
               ],
             ),
+            const SizedBox(height: 5),
           ],
         ),
       ),
