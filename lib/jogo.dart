@@ -10,7 +10,7 @@ class Jogo extends StatefulWidget {
 }
 
 class _JogoState extends State<Jogo> {
-  var _imagemApp = AssetImage("images/padrao.png"); // imagem do app
+  var _imagemApp = AssetImage("images/droidy.png"); // imagem do app
   var _mensagem = "Escolha uma opção abaixo"; // mensagem que aparece no app
   var _escolhaUsuario = ""; //guarda o que clicou
 
@@ -46,7 +46,7 @@ class _JogoState extends State<Jogo> {
         _mensagem = "Você Ganhou! 🎉";
         _pontosJogador++;
       } else {
-        _mensagem = "O App Ganhou! 😢";
+        _mensagem = "Droidy Ganhou! 😢";
         _pontosApp++;
       }
     });
@@ -55,8 +55,8 @@ class _JogoState extends State<Jogo> {
   // reseta a rodada limpando imagem e mensagem
   void _novaRodada() {
     setState(() {
-      _imagemApp = AssetImage("images/padrao.png");
-      _mensagem = "Esolha uma opção abaixo:";
+      _imagemApp = AssetImage("images/droidy.png");
+      _mensagem = "Escolha uma opção abaixo:";
       _escolhaUsuario = "";
     });
   }
@@ -83,175 +83,186 @@ class _JogoState extends State<Jogo> {
 
   @override
   Widget build(BuildContext context) {
+    double alturaTela = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(title: Text("Pedra, Papel & Tesoura")),
       body: SingleChildScrollView(
         //garante que caiba em telas menores
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            //escolha do app
-            const Padding(
-              padding: EdgeInsets.only(top: 25, bottom: 10),
-              child: Text(
-                "Escolha do App",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        child: Container(
+          constraints: BoxConstraints(minHeight: alturaTela - 200),
+          //define que o container vai tertodo o espaço da tela menos o appbar e o bottombar
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              // bloco1:escolha do droidy
+              Column(
+                children: [
+                  const Text(
+                    "Escolha do Droidy",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10), //respiro interno
+                  Image(image: _imagemApp, height: 85),
+                ],
               ),
-            ),
-            Image(image: _imagemApp, height: 85),
-            //mensagem de instruçao e de resultado
-            Padding(
-              padding: const EdgeInsets.only(top: 25, bottom: 20),
-              child: Text(
+
+              // bloco 2:mensagem de instruçao e de resultado
+              Text(
                 _mensagem,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(height: 35),
-            //opçoes usuario e borda verde
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () => _selecionarOpcao("pedra"),
-                  child: Container(
-                    decoration: _estiloBorda("pedra"),
+
+              //bloco 3:opçoes usuario e borda verde
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () => _selecionarOpcao("pedra"),
+                    child: Container(
+                      decoration: _estiloBorda("pedra"),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(70),
+                        child: Image.asset("images/pedra.png", height: 75),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => _selecionarOpcao("papel"),
+                    child: Container(
+                      decoration: _estiloBorda("papel"),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(70),
+                        child: Image.asset("images/papel.png", height: 75),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => _selecionarOpcao("tesoura"),
+                    child: Container(
+                      decoration: _estiloBorda("tesoura"),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(70),
+                        child: Image.asset("images/tesoura.png", height: 75),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              //bloco 4: botoes de açao
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  //Botao jokenpo
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.amber, width: 3),
+                      borderRadius: BorderRadius.circular(35),
+                    ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(70),
-                      child: Image.asset("images/pedra.png", height: 75),
+                      borderRadius: BorderRadius.circular(35),
+                      child: GestureDetector(
+                        onTap: _jogar,
+                        child: Image.asset("images/jokenpo.jpeg", height: 65),
+                      ),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () => _selecionarOpcao("papel"),
-                  child: Container(
-                    decoration: _estiloBorda("papel"),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(70),
-                      child: Image.asset("images/papel.png", height: 75),
+                  //botao nova rodada
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue, width: 3),
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.refresh,
+                        size: 45,
+                        color: Colors.blue,
+                      ),
+                      onPressed: _novaRodada,
+                      tooltip: "Nova Rodada",
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () => _selecionarOpcao("tesoura"),
-                  child: Container(
-                    decoration: _estiloBorda("tesoura"),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(70),
-                      child: Image.asset("images/tesoura.png", height: 75),
+                  //botao zerar placar
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.red, width: 3),
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.delete_forever,
+                        size: 45,
+                        color: Colors.red,
+                      ),
+                      onPressed: _zerarPlacar,
+                      tooltip: "Nova Rodada",
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 100,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 2,
+              offset: Offset(0, -4), //cria sombra para cima
             ),
-            const SizedBox(height: 60),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                //Botao jokenpo
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.amber, width: 3),
-                    borderRadius: BorderRadius.circular(35),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(35),
-                    child: GestureDetector(
-                      onTap: _jogar,
-                      child: Image.asset("images/jokenpo.jpeg", height: 65),
-                    ),
-                  ),
-                ),
-
-                //botao nova rodada
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blue, width: 3),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.refresh,
-                      size: 45,
-                      color: Colors.blue,
-                    ),
-                    onPressed: _novaRodada,
-                    tooltip: "Nova Rodada",
-                  ),
-                ),
-                //botao zerar placar
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.red, width: 3),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.delete_forever,
-                      size: 45,
-                      color: Colors.red,
-                    ),
-                    onPressed: _zerarPlacar,
-                    tooltip: "Nova Rodada",
-                  ),
-                ),
-              ],
-            ),
-
-            const Divider(
-              height: 40,
-              thickness: 2,
-            ), // linha para separar o placar
-
+          ],
+          border: Border(top: BorderSide(color: Colors.grey, width: 0.5)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             const Text(
               "PLACAR",
-              textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      const Text("Você"),
-                      Text(
-                        "$_pontosJogador",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    const Text("Você"),
+                    Text(
+                      "$_pontosJogador",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
                       ),
-                    ],
-                  ),
-                  const Text(
-                    "VS",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Column(
-                    children: [
-                      const Text("App"),
-                      Text(
-                        "$_pontosApp",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
+                    ),
+                  ],
+                ),
+                const Text("VS", style: TextStyle(fontWeight: FontWeight.bold)),
+                Column(
+                  children: [
+                    const Text("Droidy"),
+                    Text(
+                      "$_pontosApp",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
