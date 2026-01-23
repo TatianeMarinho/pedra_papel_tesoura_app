@@ -4,10 +4,9 @@ O **DroidyPô** é um projeto desenvolvido em Flutter que eleva o clássico "Ped
 
 ## 📱 Demonstração
 
-<div style="text-align: center;">
-  <img src="assets/droidypo.gif" width="300" alt="GIF do App DroidyPô funcionando">
-  <p><i>Visualização das jogadas, animação de sombras reativas e placar dinâmico.</i></p>
-</div>
+| App em Funcionamento | Descrição |
+| :--- | :--- |
+| <img src="assets/droidypo.gif" width="180" alt="GIF do DroidyPô"> | **Experiência Interativa:** <br><br> • Visualização das jogadas em tempo real. <br> • Feedback visual com animação de sombras reativas. <br> • Placar dinâmico sincronizado com a lógica de jogo. <br><br> _Layout otimizado para uma experiência mobile fluida._ |
 
 ---
 
