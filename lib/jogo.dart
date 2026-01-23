@@ -21,7 +21,7 @@ class _JogoState extends State<Jogo> {
   void _selecionarOpcao(String escolha) {
     setState(() {
       _escolhaUsuario = escolha;
-      _mensagem = "Opção selecionada! Clique em JOKENPÔ";
+      _mensagem = "Opção selecionada! Clique em DROIDYPÔ";
     });
   }
 
